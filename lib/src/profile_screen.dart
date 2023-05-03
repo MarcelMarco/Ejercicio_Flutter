@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class ProfileScreen extends StatefulWidget {
   @override
@@ -7,9 +8,21 @@ class ProfileScreen extends StatefulWidget {
 
 class _ProfileScreenState extends State<ProfileScreen> {
   // Algunos datos de ejemplo
-  final String _name = "SEMINARI 10-Flutter";
-  final String _email = "flutter@gmail.com";
+  String _name = "";
+  String _email = "";
   final String _bio = "Desarrolladores de software apasionados por Flutter! :)";
+
+  @override
+  void initState() {
+    super.initState();
+    setInformacion();
+  }
+
+  Future setInformacion() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    this._name = prefs.getString("name").toString();
+    this._email = prefs.getString("email").toString();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -26,12 +39,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
             height: 200,
             decoration: BoxDecoration(
               color: Color.fromARGB(255, 104, 96, 139),
-            
             ),
             child: Center(
               child: CircleAvatar(
                 radius: 60,
-                backgroundColor:Color.fromRGBO(0, 0, 128, 4),
+                backgroundColor: Color.fromRGBO(0, 0, 128, 4),
               ),
             ),
           ),

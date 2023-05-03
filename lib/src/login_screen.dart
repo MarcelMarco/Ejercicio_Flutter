@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter_application/src/list_screen.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -94,6 +95,14 @@ class _LoginScreenState extends State<LoginScreen> {
                             "password": passwordController.text
                           });
                           if (response.statusCode == 200) {
+                            var datos = jsonDecode(response.data);
+                            print(response.data);
+                            final SharedPreferences prefs =
+                                await SharedPreferences.getInstance();
+                            await prefs.setString(
+                                "name", response.data['name']);
+                            await prefs.setString(
+                                "email", response.data['email']);
                             Navigator.pushNamed(context, '/list_screen');
                             //final idUserSaved=Navigator.of(context).push(MaterialPageRoute(builder: (BuildContext context){return new ListScreen(idUser);}));
                           } else if (response.statusCode == 403) {
